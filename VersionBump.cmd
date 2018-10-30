@@ -9,14 +9,14 @@ set /P _version=<SemVer.txt
 del SemVer.txt
 	
 if "!_version!"=="" (
-	echo "Er ikke istand til � finne SemVer"
+	echo "Can't find SemVer"
 	exit /b 666
 )
 	
-echo Setter tag '!_version!' i git
+echo Setting tag '!_version!' in git
 
 git tag -f !_version!
 git push origin !_version!
 
-echo ... utf�rt
+echo ... finished
 
