@@ -1,0 +1,11 @@
+# See https://aka.ms/yaml for help
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+steps:
+- script: dotnet restore
+  displayName: 'Restore NuGet packages'
+
+- script: echo dotnet build
+  displayName: 'Build the project'

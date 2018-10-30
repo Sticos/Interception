@@ -1,0 +1,8 @@
+branches:
+  releases?[/-]:
+    tag: rc
+  hotfix(es)?[/-]:
+    tag: rc
+  dev(elop)?(ment)?$:
+    tag: beta
+  
