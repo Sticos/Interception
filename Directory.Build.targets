@@ -1,0 +1,53 @@
+<Project>
+  <!-- This file will be included in all MsBuilds of projects below this folder, and calculates Version, PackageVersion and FileVersion attributes -->
+
+  <ItemGroup>
+    <!-- Version number generation is dependent on GitVersion -->
+    <PackageReference Include="GitVersionTask" Version="3.6.5">
+      <PrivateAssets>All</PrivateAssets>
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Instruct GitVersionTask to not change anything, just give us the version properties -->
+    <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
+    <UpdateVersionProperties>false</UpdateVersionProperties>
+    <GetVersion>true</GetVersion>
+    <GenerateNuspecDependsOn>SetProductVersion</GenerateNuspecDependsOn>
+    <GetPackageVersionDependsOn>SetProductVersion</GetPackageVersionDependsOn>
+  </PropertyGroup>
+
+  <!-- Let GitVersion calculate the product version before .NET Sdk creates assembly version info -->
+  <Target Name="SetProductVersion" DependsOnTargets="GetVersion" BeforeTargets="GetAssemblyVersion" Condition="Exists('$(NuGetPackageRoot)gitversiontask\3.6.5\build\dotnet\GitVersionTask.targets')">
+
+    <Message Text="GitVersion calculated version $(GitVersion_NuGetVersion)" />
+
+    <PropertyGroup>
+      <Version>$(GitVersion_NuGetVersion)</Version> <!-- Override any settings from project file -->
+
+      <PackageVersion>$(GitVersion_NuGetVersion)</PackageVersion> <!-- Set version number for NuGetPackage (if built) -->
+      <!-- This could have been deduced from Version if we knew how to calculate this before NuGet.Build.Tasks.Pack.targets is imported -->
+
+    </PropertyGroup>
+  </Target>
+
+  <!-- Set build number in FileVersion(AssemblyFileVersion) if supplied and not specified explicitly -->
+  <Target Name="SetBuildNumber" BeforeTargets="GetAssemblyVersion" Condition="'$(BUILD_BUILDNUMBER)' != ''">
+
+    <PropertyGroup>
+      <FileVersion Condition="'$(FileVersion)' == ''">0.0.0.0</FileVersion> <!-- Dummy value if not set-->
+
+      <!-- RegEx to check if build number shall be inserted -->
+      <FileVersionRegEx>(\d+\.\d+\.)0(?:\.0)?</FileVersionRegEx>
+
+      <!-- Substitution pattern for RegEx -->
+      <BuildNumberSubstitution>%24{1}$(BUILD_BUILDNUMBER)</BuildNumberSubstitution>
+
+      <!-- Insert build number if FileVersion has format x.y.0(.0) -->
+      <FileVersion>$([System.Text.RegularExpressions.RegEx]::Replace($(FileVersion), $(FileVersionRegEx), $(BuildNumberSubstitution)))</FileVersion>
+    </PropertyGroup>
+
+    <Message Text="FileVersion set to $(FileVersion)" />
+  </Target>
+</Project>

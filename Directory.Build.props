@@ -1,0 +1,16 @@
+<Project>
+  <!-- This file will be included in all MSBuilds of projects below this folder, and includes common assembly attributes -->
+ 
+  <PropertyGroup>
+    <!-- Don't autogenerate these, as we have a common definition in SolutionInfo.cs -->
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+  </PropertyGroup>
+ 
+  <ItemGroup>
+    <!-- Automagical include this file in all project files -->
+    <Compile Include="..\SolutionInfo.cs" />
+  </ItemGroup>
+
+</Project>
