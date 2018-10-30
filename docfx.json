@@ -1,0 +1,28 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "**/*.csproj" ],
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src": "Sticos.Interception"
+        }
+      ],
+      "dest": "obj/doc"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "**/*.yml" ],
+        "src": "obj/doc",
+        "dest": "doc"
+      },
+      {
+        "files": [ "*.md", "toc.yml" ]
+      }
+    ],
+    "dest": "obj/_site",
+    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ]
+  }
+}
